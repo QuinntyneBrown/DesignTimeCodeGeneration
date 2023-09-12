@@ -1,5 +1,5 @@
 # Design-Time Code Generation
-Introductory Design-Time Code Generation project 
+Introductory Design-Time Code Generation project using C#. 
 
 ## Give a Star! :star:
 
