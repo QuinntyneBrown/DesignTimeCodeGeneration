@@ -1,5 +1,5 @@
 # Design-Time Code Generation
-Introductory Code Generation project 
+Introductory Design-Time Code Generation project 
 
 ## Give a Star! :star:
 
