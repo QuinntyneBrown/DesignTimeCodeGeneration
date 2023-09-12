@@ -7,8 +7,7 @@ If you like or are using this project to learn or start your solution, please gi
 
 ## Table of Contents
 - [What is Design-Time Code Generation](#whatisit)
-- [How to run locally](#usage)
-- [How to Test](#roadmap)
+
   
 
 ## What is Design-Time Code Generation
@@ -46,8 +45,3 @@ If you like or are using this project to learn or start your solution, please gi
     File.WriteAllText($@"..\..\..\..\Target\{model.GetProperty("name").GetString()}.g.cs", result);
 }
  ```
-
-## How to run locally
-
-
-## How to test
