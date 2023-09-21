@@ -45,3 +45,5 @@ If you like or are using this project to learn or start your solution, please gi
     File.WriteAllText($@"..\..\..\..\Target\{model.GetProperty("name").GetString()}.g.cs", result);
 }
  ```
+
+### Additional Resources
