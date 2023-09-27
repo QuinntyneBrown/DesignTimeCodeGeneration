@@ -17,16 +17,25 @@ If you like or are using this project to learn or start your solution, please gi
 
  ### Template
 
- ```text
- public record struct @(Model.Name)();
+ ```csharp
+    var result = $$"""
+        public record struct {{model.Name}}({{string.Join(",",model.Properties.Select(x => $"{x.Type} {x.Name}"))}});
+        """;
  ```
 
  ### Data / Model / User Input
  ```data
- {
+{
     "simpleTypes": [
       {
-        "name": "HelloWorld"
+        "name": "HelloWorld",
+        "namespace": "Target",
+        "properties": [
+          {
+            "name": "Greeting",
+            "type": "string"
+          }
+        ]
       }
     ]
 }
@@ -34,15 +43,13 @@ If you like or are using this project to learn or start your solution, please gi
 
  ### Generation Strategy
  ```csharp
- async Task GenerateAsync(JsonElement model)
-{
-    var template = GetTemplate("Record");
+void Generate(SimpleType model)
+{    
+    var result = $$"""
+        public record struct {{model.Name}}({{string.Join(",",model.Properties.Select(x => $"{x.Type} {x.Name}"))}});
+        """;
 
-    var templateProcessor = new RazorTemplateProcessor();
-
-    var result = await templateProcessor.ProcessAsync(template, new { Name = model.GetProperty("name").GetString() });
-
-    File.WriteAllText($@"..\..\..\..\Target\{model.GetProperty("name").GetString()}.g.cs", result);
+    File.WriteAllText($@"..\..\..\..\Target\{model.Name}.g.cs", result);
 }
  ```
 
