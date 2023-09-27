@@ -1,34 +1,45 @@
-﻿var data = File.ReadAllText($@"..\..\..\..\..\data\definitions.json");
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
-var definitions = JsonSerializer.Deserialize<JsonElement>(data);
+var data = File.ReadAllText($@"..\..\..\..\..\data\definitions.json");
 
-foreach(var item in definitions.GetProperty("simpleTypes").EnumerateArray())
+var definitions = JsonSerializer.Deserialize<SimpleTypesDefinitionsDocument>(data)!;
+
+foreach(var item in definitions.SimpleTypes)
 {
-    await GenerateAsync(item);
+    Generate(item);
 }
 
-async Task GenerateAsync(JsonElement model)
-{
-    var template = GetTemplate("Record");
+void Generate(SimpleType model)
+{    
+    var result = $$"""
+        public record struct {{model.Name}}({{string.Join(",",model.Properties.Select(x => $"{x.Type} {x.Name}"))}});
+        """;
 
-    var templateProcessor = new RazorTemplateProcessor();
-
-    var result = await templateProcessor.ProcessAsync(template, new { Name = model.GetProperty("name").GetString() });
-
-    File.WriteAllText($@"..\..\..\..\Target\{model.GetProperty("name").GetString()}.g.cs", result);
+    File.WriteAllText($@"..\..\..\..\Target\{model.Name}.g.cs", result);
 }
 
-string GetTemplate(string name)
+
+public class SimpleTypesDefinitionsDocument
 {
-    var assembly = Assembly.GetExecutingAssembly();
+    [JsonPropertyName("simpleTypes")]
+    public required List<SimpleType> SimpleTypes { get; set; }
+}
 
-    var resourceName = assembly.GetManifestResourceNames().Single(x => x.EndsWith($"{name}.txt"));
+public class SimpleType
+{
+    [JsonPropertyName("name")]
+    public required string Name { get; set; }
 
-    using(var stream = assembly.GetManifestResourceStream(resourceName))
-    {
-        using (var streamReader = new StreamReader(stream))
-        {
-            return streamReader.ReadToEnd();
-        }
-    }
+    [JsonPropertyName("properties")]
+    public required List<Property> Properties { get; set; }
+}
+
+public class Property
+{
+    [JsonPropertyName("type")]
+    public required string Type { get; set; }
+
+    [JsonPropertyName("name")]
+    public required string Name { get; set; }
 }

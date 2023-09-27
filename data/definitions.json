@@ -1,7 +1,14 @@
 {
     "simpleTypes": [
       {
-        "name": "HelloWorld"
+        "name": "HelloWorld",
+        "namespace": "Target",
+        "properties": [
+          {
+            "name": "Greeting",
+            "type": "string"
+          }
+        ]
       }
     ]
 }
