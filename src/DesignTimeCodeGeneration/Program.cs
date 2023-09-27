@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 
 var data = File.ReadAllText($@"..\..\..\..\..\data\definitions.json");
 
@@ -17,29 +16,4 @@ void Generate(SimpleType model)
         """;
 
     File.WriteAllText($@"..\..\..\..\Target\{model.Name}.g.cs", result);
-}
-
-
-public class SimpleTypesDefinitionsDocument
-{
-    [JsonPropertyName("simpleTypes")]
-    public required List<SimpleType> SimpleTypes { get; set; }
-}
-
-public class SimpleType
-{
-    [JsonPropertyName("name")]
-    public required string Name { get; set; }
-
-    [JsonPropertyName("properties")]
-    public required List<Property> Properties { get; set; }
-}
-
-public class Property
-{
-    [JsonPropertyName("type")]
-    public required string Type { get; set; }
-
-    [JsonPropertyName("name")]
-    public required string Name { get; set; }
 }
