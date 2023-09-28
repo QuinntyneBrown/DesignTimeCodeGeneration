@@ -18,9 +18,23 @@ If you like or are using this project to learn or start your solution, please gi
  ### Template
 
  ```csharp
-    var result = $$"""
-        public record struct {{model.Name}}({{string.Join(",",model.Properties.Select(x => $"{x.Type} {x.Name}"))}});
-        """;
+        $$"""
+        public readonly struct {{model.Name.ToPascalCase()}}
+        {
+            private readonly {{model.SourceType}} {{model.Name.ToCamelCase()}};
+
+            public {{model.Name.ToPascalCase()}}({{model.SourceType}} {{model.Name.ToCamelCase()}})
+            {
+        {{validations.Indent(2)}}
+                this.{{model.Name.ToCamelCase()}} = {{model.Name.ToCamelCase()}};
+            }
+
+            public static implicit operator {{model.SourceType}}({{model.Name.ToPascalCase()}} value) => value.{{model.Name.ToCamelCase()}};
+            public static explicit operator {{model.Name.ToPascalCase()}}({{model.SourceType}} value) => new {{model.Name.ToPascalCase()}}(value);
+
+            public override string ToString() => $"{{{model.Name.ToCamelCase()}}}";
+        }
+        """
  ```
 
  ### Data / Model / User Input
@@ -28,13 +42,14 @@ If you like or are using this project to learn or start your solution, please gi
 {
     "simpleTypes": [
       {
-        "name": "HelloWorld",
-        "namespace": "Target",
-        "properties": [
+        "name": "Digit",
+        "sourceType": "int",
+        "validations": [
           {
-            "name": "Greeting",
-            "type": "string"
+            "maxValue": 9,
+            "errorMessage": "Digit cannot be greater than nine."
           }
+
         ]
       }
     ]
